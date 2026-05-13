@@ -36,8 +36,8 @@ Questionture комбинира game mechanics с реалния свят — н
 ### Clone на repository-то
 
 ```bash
-git clone https://github.com/IT-8-TUES/8B-25-26-Random-Otbor.git
-cd 8B-25-26-Random-Otbor
+git clone https://github.com/Supermyskin/Questure.git
+cd Questure
 ```
 
 ### Backend setup
@@ -83,6 +83,8 @@ Backend API: `http://localhost:3000`
 ---
 
 # 📁 Структура на проекта
+
+## ⚠️ Внимание - Това е структурата на проекта в клонираното репо (форкът на това репо, за да може да имаме GH-Pages Hosting)
 
 ```txt
 questionture/
