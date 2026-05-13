@@ -78,7 +78,7 @@ body::before {
 .glow-blob-1 {
     width: 37.5rem;
     height: 37.5rem;
-    background: var(--purple);
+    background: var(--primary);
     top: -12.5rem;
     left: -6.25rem;
 }
@@ -110,7 +110,7 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 1rem 2.5rem;
-    background: rgba(26, 21, 37, 0.85);
+    background: rgba(15, 20, 25, 0.85);
     backdrop-filter: blur(0.75rem);
     border-bottom: 0.062rem solid var(--border);
 }
