@@ -184,15 +184,23 @@ git push origin feature/amazing-feature
 Създаден от Дамян Добринов, Боян Николов, Юрий Беляков и ChatGPT като училищен проект.
 
 GitHub: @Supermyskin - Дамян
+
 Email: [supermyskin@abv.bg](mailto:your.email@example.com)
+
 Instagram: [@supermyskin.official](https://www.instagram.com/supermyskin.official/)
 
+
 GitHub: @HackerCatcho - Боян
+
 Email: Анонимен и мисториозен
+
 Instagram: [@yurzzilla](https://www.instagram.com/yurzzilla/)
 
+
 GitHub: @yurzzilla3000 - Юрий
+
 Email: Същото анонимен и мистериозен
+
 Instagram: [@hackercatcho](https://www.instagram.com/hackercatcho/)
 
 ---
