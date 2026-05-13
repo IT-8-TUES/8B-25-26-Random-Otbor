@@ -175,7 +175,7 @@ git push origin feature/amazing-feature
 * Icons: AwesomeIcons
 * Inspiration: Geocaching, Pokémon GO, Foursquare и всеки приятел, който е казвал:
 
-> “брат айде да излезем някъде”
+> “Брат, айде да излезем някъде”
 
 ---
 
