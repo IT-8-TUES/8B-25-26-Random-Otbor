@@ -49,7 +49,7 @@
                 <a href="#" class="nav-item">
                     <span class="nav-icon"><i class="fa-solid fa-trophy"></i></span> Leaderboard
                 </a>
-                <a href="#" class="nav-item">
+                <a href="./gallery.html" class="nav-item">
                     <span class="nav-icon"><i class="fa-solid fa-camera"></i></span> Gallery
                 </a>
 
@@ -116,18 +116,22 @@
                         </div>
                         <form class="section-body account-form" id="account-form">
                             <label class="field-label" for="name-input">Display name</label>
-                            <input class="field-input" id="name-input" name="name" autocomplete="name" required minlength="2">
+                            <input class="field-input" id="name-input" name="name" autocomplete="name" required
+                                minlength="2">
 
                             <label class="field-label" for="email-input">Email</label>
-                            <input class="field-input" id="email-input" name="email" type="email" autocomplete="email" required>
+                            <input class="field-input" id="email-input" name="email" type="email" autocomplete="email"
+                                required>
 
                             <label class="field-label" for="bio-input">Bio</label>
-                            <textarea class="field-input field-textarea" id="bio-input" name="bio" maxlength="180" rows="4" placeholder="Say something about your quests."></textarea>
+                            <textarea class="field-input field-textarea" id="bio-input" name="bio" maxlength="180"
+                                rows="4" placeholder="Say something about your quests."></textarea>
                             <div class="field-help"><span id="bio-count">0</span>/180</div>
 
                             <label class="field-label" for="emoji-input">Avatar emoji</label>
                             <input type="hidden" id="emoji-input" name="emoji" required>
-                            <div class="avatar-picker" id="avatar-picker" role="listbox" aria-label="Choose profile avatar"></div>
+                            <div class="avatar-picker" id="avatar-picker" role="listbox"
+                                aria-label="Choose profile avatar"></div>
                         </form>
                     </section>
 
@@ -163,18 +167,21 @@
                     </div>
                     <form class="section-body account-form password-form" id="password-form">
                         <label class="field-label" for="current-password-input">Current password</label>
-                        <input class="field-input" id="current-password-input" name="currentPassword" type="password" autocomplete="current-password">
+                        <input class="field-input" id="current-password-input" name="currentPassword" type="password"
+                            autocomplete="current-password">
 
                         <label class="field-label" for="new-password-input">New password</label>
-                        <input class="field-input" id="new-password-input" name="newPassword" type="password" autocomplete="new-password" minlength="6">
+                        <input class="field-input" id="new-password-input" name="newPassword" type="password"
+                            autocomplete="new-password" minlength="6">
 
-                        <button class="btn-primary password-save" id="save-password-btn" type="submit">Update password</button>
+                        <button class="btn-primary password-save" id="save-password-btn" type="submit">Update
+                            password</button>
                     </form>
                 </section>
             </div>
         </div>
     </div>
-        <script src="../js/profile.js"></script>
+    <script src="../js/profile.js"></script>
 </body>
 
 </html>
