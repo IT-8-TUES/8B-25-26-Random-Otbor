@@ -284,6 +284,7 @@ function logout() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    applyProfileMode();
     document.getElementById('account-form')?.addEventListener('submit', saveAccount);
     document.getElementById('password-form')?.addEventListener('submit', savePassword);
     document.getElementById('logout-btn')?.addEventListener('click', logout);
