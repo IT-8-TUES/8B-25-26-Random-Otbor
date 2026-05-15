@@ -1,11 +1,6 @@
 const userName = localStorage.getItem('userName');
 const userID = localStorage.getItem('userID');
 const API_URL = 'http://127.0.0.1:3000';
-const discoverState = {
-    quests: [],
-    filter: 'all',
-    search: ''
-};
 
 const thresholds = [
     { level: 1, xp: 0 },
@@ -59,9 +54,18 @@ function escapeHTML(value) {
 async function fetchJSON(url, options = {}) {
     const response = await fetch(url, options);
     if (!response.ok) {
-        throw new Error(`Request failed with ${response.status}`);
+        throw new Error(await getErrorMessage(response, `Request failed with ${response.status}`));
     }
     return response.json();
+}
+
+async function getErrorMessage(response, fallback) {
+    try {
+        const data = await response.json();
+        return data.message || fallback;
+    } catch (err) {
+        return fallback;
+    }
 }
 
 function safeSet(id, value) {
@@ -87,4 +91,38 @@ async function fetchUserData() {
     }
 }
 
+function formatDate(value) {
+    if (!value) return 'Unknown date';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Unknown date';
+    return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+async function fetchGalleryPhotos() {
+    const grid = document.getElementById('gallery-grid');
+    if (!userID) {
+        renderGallery([]);
+        return;
+    }
+    if (grid) {
+        grid.innerHTML = '<div class="gallery-empty">Loading gallery...</div>';
+    }
+    try {
+        const data = await fetchJSON(`${API_URL}/fetch-gallery-photos?userID=${encodeURIComponent(userID)}`);
+        renderGallery(Array.isArray(data.photos) ? data.photos : []);
+    } catch (err) {
+        console.error("Error fetching gallery photos:", err);
+        safeSet('pictures-count', 0);
+        if (grid) {
+            grid.innerHTML = `<div class="gallery-empty">${escapeHTML(err.message || 'Could not load gallery.')}</div>`;
+        }
+    }
+}
+document.getElementById('gallery-refresh')?.addEventListener('click', fetchGalleryPhotos);
+
 fetchUserData();
+fetchGalleryPhotos();
