@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Questure - Home</title>
+    <title>Questure - Gallery</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800;900&display=swap"
@@ -49,7 +49,7 @@
                 <a href="#" class="nav-item">
                     <span class="nav-icon"><i class="fa-solid fa-trophy"></i></span> Leaderboard
                 </a>
-                <a href="#" class="nav-item active">
+                <a href="./gallery.html" class="nav-item active">
                     <span class="nav-icon"><i class="fa-solid fa-camera"></i></span> Gallery
                 </a>
 
@@ -92,6 +92,21 @@
                 </div>
             </header>
             <div class="content">
+                <section class="gallery-section">
+                    <div class="gallery-toolbar">
+                        <div>
+                            <span class="section-title-pixel">// QUEST PHOTOS</span>
+                            <p class="gallery-subtitle">Proof from active and completed quests.</p>
+                        </div>
+                        <button type="button" class="gallery-refresh" id="gallery-refresh" title="Refresh gallery"
+                            aria-label="Refresh gallery">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+                    <div id="gallery-grid" class="gallery-grid">
+                        <div class="gallery-empty">Loading gallery...</div>
+                    </div>
+                </section>
             </div>
         </div>
     </div>

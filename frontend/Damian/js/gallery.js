@@ -1,11 +1,6 @@
 const userName = localStorage.getItem('userName');
 const userID = localStorage.getItem('userID');
 const API_URL = 'http://127.0.0.1:3000';
-const discoverState = {
-    quests: [],
-    filter: 'all',
-    search: ''
-};
 
 const thresholds = [
     { level: 1, xp: 0 },
@@ -59,9 +54,18 @@ function escapeHTML(value) {
 async function fetchJSON(url, options = {}) {
     const response = await fetch(url, options);
     if (!response.ok) {
-        throw new Error(`Request failed with ${response.status}`);
+        throw new Error(await getErrorMessage(response, `Request failed with ${response.status}`));
     }
     return response.json();
+}
+
+async function getErrorMessage(response, fallback) {
+    try {
+        const data = await response.json();
+        return data.message || fallback;
+    } catch (err) {
+        return fallback;
+    }
 }
 
 function safeSet(id, value) {
@@ -87,4 +91,85 @@ async function fetchUserData() {
     }
 }
 
+function formatDate(value) {
+    if (!value) return 'Unknown date';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Unknown date';
+    return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+function renderGallery(photos = []) {
+    const grid = document.getElementById('gallery-grid');
+    if (!grid) return;
+    const validPhotos = photos.filter((photo) => photo && photo.photoUrl);
+    safeSet('pictures-count', validPhotos.length);
+    grid.replaceChildren();
+    if (validPhotos.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'gallery-empty';
+        empty.innerHTML = `
+            <i class="fa-regular fa-images"></i>
+            <span>No quest photos yet.</span>
+        `;
+        grid.appendChild(empty);
+        return;
+    }
+    validPhotos.forEach((photo, index) => {
+        const card = document.createElement('article');
+        card.className = 'gallery-card';
+        const link = document.createElement('a');
+        link.className = 'gallery-image-link';
+        link.href = photo.photoUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        const image = document.createElement('img');
+        image.src = photo.photoUrl;
+        image.alt = `${photo.quest?.title || 'Quest'} photo ${index + 1}`;
+        image.loading = 'lazy';
+        const badge = document.createElement('span');
+        badge.className = 'gallery-quest-badge';
+        badge.textContent = photo.quest?.banner || '⚡';
+        link.append(image, badge);
+        const meta = document.createElement('div');
+        meta.className = 'gallery-meta';
+        const name = document.createElement('span');
+        name.textContent = photo.owner?.name || (photo.userId === userID ? 'You' : 'Unknown');
+        const date = document.createElement('span');
+        date.textContent = formatDate(photo.createdAt);
+        const quest = document.createElement('a');
+        quest.href = `../pages/quest.html?questID=${encodeURIComponent(photo.questID || '')}`;
+        quest.textContent = photo.quest?.title || photo.questID || 'Quest';
+        meta.append(name, document.createTextNode(' | '), date, document.createTextNode(' | '), quest);
+        card.append(link, meta);
+        grid.appendChild(card);
+    });
+}
+
+async function fetchGalleryPhotos() {
+    const grid = document.getElementById('gallery-grid');
+    if (!userID) {
+        renderGallery([]);
+        return;
+    }
+    if (grid) {
+        grid.innerHTML = '<div class="gallery-empty">Loading gallery...</div>';
+    }
+    try {
+        const data = await fetchJSON(`${API_URL}/fetch-gallery-photos?userID=${encodeURIComponent(userID)}`);
+        renderGallery(Array.isArray(data.photos) ? data.photos : []);
+    } catch (err) {
+        console.error("Error fetching gallery photos:", err);
+        safeSet('pictures-count', 0);
+        if (grid) {
+            grid.innerHTML = `<div class="gallery-empty">${escapeHTML(err.message || 'Could not load gallery.')}</div>`;
+        }
+    }
+}
+document.getElementById('gallery-refresh')?.addEventListener('click', fetchGalleryPhotos);
+
 fetchUserData();
+fetchGalleryPhotos();
