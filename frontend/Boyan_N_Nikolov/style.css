@@ -71,6 +71,25 @@ a:hover {
     text-decoration: none;
 }
 
+#leaderboard-link {
+    display: inline-block;
+    background-color: #2d3642;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    margin-left: 0.5rem;         
+    border: 1px solid #3b4452;
+    color: #e2e8f0;            
+    text-decoration: none;
+}
+
+#leaderboard-link:hover {
+    background-color: #14b8a6;
+    color: #1a1f26;
+    text-decoration: none;
+}
+
 #guide {
     max-width: 85%;
     margin-right: 11%;

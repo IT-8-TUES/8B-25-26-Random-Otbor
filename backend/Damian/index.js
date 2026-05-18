@@ -113,6 +113,8 @@ const Quest = mongoose.model('Quest', questSchema);
 const QuestSubmission = mongoose.model('QuestSubmission', questSubmissionSchema);
 const QuestSession = mongoose.model('QuestSession', questSessionSchema);
 
+
+
 async function findUserByUsername(name, excludedUserId) {
   const normalizedName = normalizeUsername(name);
   if (!normalizedName) return null;
