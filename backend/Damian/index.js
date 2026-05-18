@@ -90,6 +90,13 @@ const Quest = mongoose.model('Quest', questSchema);
 const QuestSubmission = mongoose.model('QuestSubmission', questSubmissionSchema);
 const QuestSession = mongoose.model('QuestSession', questSessionSchema);
 
+// Register leaderboard routes implemented in the Boyan_N_Nikolov folder
+try {
+  require('../Boyan_N_Nikolov/leaderboards')(app, User);
+} catch (e) {
+  console.error('Could not load leaderboards module:', e && e.message);
+}
+
 function toPublicUser(user) {
   return {
     userId: user.userId,
