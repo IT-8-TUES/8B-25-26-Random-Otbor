@@ -132,6 +132,18 @@ main.page-main {
     margin-bottom: 0.5rem;
 }
 
+.player-rank.gold {
+    background-color: #f59e0b;
+    color: #1a1f26;
+}
+.player-rank.silver {
+    background-color: #94a3b8;
+    color: #1a1f26;
+}
+.player-rank.bronze {
+    background-color: #c47a00;
+    color: #1a1f26;
+}
 .player-name {
     font-size: 1.1rem;
     font-weight: bold;
@@ -151,4 +163,13 @@ main.page-main {
     background-color: #2d3642;
     border: 1px solid #3b4452;
     border-radius: 18px;
+}
+
+.friends-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #e2e8f0;
+    font-weight: 600;
+    margin-left: 1rem;
 }

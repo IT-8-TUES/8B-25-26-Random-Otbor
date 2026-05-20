@@ -1,24 +1,25 @@
-// Static player data (fallback)
+
 const players = [
-    { name: 'Ariana', emoji: '🔥', xp: 15240 },
-    { name: 'Mihail', emoji: '⚡', xp: 13980 },
-    { name: 'Nikol', emoji: '🌟', xp: 12300 },
-    { name: 'Gergana', emoji: '🛡️', xp: 11450 },
-    { name: 'Petar', emoji: '🧠', xp: 10930 },
-    { name: 'Stella', emoji: '✨', xp: 9800 },
-    { name: 'Veselin', emoji: '🏹', xp: 8750 },
-    { name: 'Lidia', emoji: '🌙', xp: 7640 },
-    { name: 'Teodor', emoji: '⚔️', xp: 6510 },
-    { name: 'Yana', emoji: '🌿', xp: 5400 }
+    { name: 'Ariana',  emoji: '🔥', xp: 15240, userId: 'u1' },
+    { name: 'Mihail',  emoji: '⚡', xp: 13980, userId: 'u2' },
+    { name: 'Nikol',   emoji: '🌟', xp: 12300, userId: 'u3' },
+    { name: 'Gergana', emoji: '🛡️', xp: 11450, userId: 'u4' },
+    { name: 'Petar',   emoji: '🧠', xp: 10930, userId: 'u5' },
+    { name: 'Stella',  emoji: '✨', xp: 9800,  userId: 'u6' },
+    { name: 'Veselin', emoji: '🏹', xp: 8750,  userId: 'u7' },
+    { name: 'Lidia',   emoji: '🌙', xp: 7640,  userId: 'u8' },
+    { name: 'Teodor',  emoji: '⚔️', xp: 6510,  userId: 'u9' },
+    { name: 'Yana',    emoji: '🌿', xp: 5400,  userId: 'u10' }
 ];
+
+const friendUserIds = ['u1', 'u2', 'u5', 'u7', 'u10'];
 
 const topCountInput = document.getElementById('top-count');
 const updateBtn = document.getElementById('update-btn');
+const friendsOnlyCheckbox = document.getElementById('friends-only');
 const container = document.getElementById('leaderboardContainer');
 
-
-function renderLeaderboard(count) {
-
+function renderLeaderboard(count, filterFriends) {
     container.innerHTML = '';
 
     if (count < 1 || players.length === 0) {
@@ -29,7 +30,19 @@ function renderLeaderboard(count) {
         return;
     }
 
-    const shownPlayers = players.slice(0, count);
+    let filteredPlayers = players.slice();
+
+    if (filterFriends) {
+        filteredPlayers = players.filter(function(player) {
+            return friendUserIds.indexOf(player.userId) !== -1;
+        });
+    }
+
+    filteredPlayers.sort(function(a, b) {
+        return b.xp - a.xp;
+    });
+
+    const shownPlayers = filteredPlayers.slice(0, count);
 
     shownPlayers.forEach(function(player, index) {
         const card = document.createElement('article');
@@ -37,6 +50,15 @@ function renderLeaderboard(count) {
 
         const rankDiv = document.createElement('div');
         rankDiv.classList.add('player-rank');
+
+        if (index === 0) {
+            rankDiv.classList.add('gold');
+        } else if (index === 1) {
+            rankDiv.classList.add('silver');
+        } else if (index === 2) {
+            rankDiv.classList.add('bronze');
+        }
+
         rankDiv.innerText = (index + 1).toString();
 
         const nameDiv = document.createElement('div');
@@ -52,10 +74,16 @@ function renderLeaderboard(count) {
         card.appendChild(xpDiv);
 
         container.appendChild(card);
+
+        if (index === 2 && shownPlayers.length > 3) {
+            const separator = document.createElement('div');
+            separator.classList.add('separator');
+            container.appendChild(separator);
+        }
     });
 }
 
-updateBtn.addEventListener('click', function() {
+function render() {
     const rawValue = topCountInput.value.trim();
     if (rawValue === '') {
         container.innerHTML = '';
@@ -73,7 +101,11 @@ updateBtn.addEventListener('click', function() {
     count = Math.max(1, Math.min(100, count));
     topCountInput.value = count;
 
-    renderLeaderboard(count);
-});
+    const filterFriends = friendsOnlyCheckbox.checked;
+    renderLeaderboard(count, filterFriends);
+}
 
-renderLeaderboard(Number(topCountInput.value) || 5);
+updateBtn.addEventListener('click', render);
+friendsOnlyCheckbox.addEventListener('change', render);
+
+render();
