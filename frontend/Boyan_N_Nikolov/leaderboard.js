@@ -1,5 +1,11 @@
+const API_URL = 'http://127.0.0.1:3000';
+const userID = localStorage.getItem('userID');
 
-const players = [
+// Hardcoded friend IDs (used when filtering by friends)
+const friendUserIds = ['u1', 'u2', 'u3', 'u5', 'u8'];
+
+// Fallback player list (includes userId for client‑side filtering)
+const fallbackPlayers = [
     { name: 'Ariana',  emoji: '🔥', xp: 15240, userId: 'u1' },
     { name: 'Mihail',  emoji: '⚡', xp: 13980, userId: 'u2' },
     { name: 'Nikol',   emoji: '🌟', xp: 12300, userId: 'u3' },
@@ -12,41 +18,62 @@ const players = [
     { name: 'Yana',    emoji: '🌿', xp: 5400,  userId: 'u10' }
 ];
 
-const friendUserIds = ['u1', 'u2', 'u5', 'u7', 'u10'];
-
 const topCountInput = document.getElementById('top-count');
 const updateBtn = document.getElementById('update-btn');
 const friendsOnlyCheckbox = document.getElementById('friends-only');
 const container = document.getElementById('leaderboardContainer');
 
-function renderLeaderboard(count, filterFriends) {
+function showMessage(message) {
+    container.innerHTML = '';
+    const msg = document.createElement('div');
+    msg.className = 'no-results';
+    msg.innerText = message;
+    container.appendChild(msg);
+}
+
+function normalizeCount() {
+    const rawValue = topCountInput.value.trim();
+    if (rawValue === '') {
+        showMessage('Enter a number between 1 and 100.');
+        return null;
+    }
+
+    let count = Number(rawValue);
+    if (isNaN(count)) {
+        count = 1;
+    }
+
+    count = Math.max(1, Math.min(100, count));
+    topCountInput.value = count;
+    return count;
+}
+
+function filterByFriends(players) {
+    if (!friendsOnlyCheckbox.checked) {
+        return players;
+    }
+    return players.filter(function(player) {
+        if (player.userId) {
+            return friendUserIds.indexOf(player.userId) !== -1;
+        }
+        return friendUserIds.indexOf(player.name) !== -1;
+    });
+}
+
+function renderLeaderboard(players) {
     container.innerHTML = '';
 
-    if (count < 1 || players.length === 0) {
-        const msg = document.createElement('div');
-        msg.className = 'no-results';
-        msg.innerText = 'No players to display.';
-        container.appendChild(msg);
+    if (!players || players.length === 0) {
+        showMessage('No players to display.');
         return;
     }
 
-    let filteredPlayers = players.slice();
-
-    if (filterFriends) {
-        filteredPlayers = players.filter(function(player) {
-            return friendUserIds.indexOf(player.userId) !== -1;
-        });
-    }
-
-    filteredPlayers.sort(function(a, b) {
-        return b.xp - a.xp;
-    });
-
-    const shownPlayers = filteredPlayers.slice(0, count);
-
-    shownPlayers.forEach(function(player, index) {
+    players.forEach(function (player, index) {
         const card = document.createElement('article');
         card.classList.add('player-card');
+        if (player.isCurrentUser) {
+            card.classList.add('current-player');
+        }
 
         const rankDiv = document.createElement('div');
         rankDiv.classList.add('player-rank');
@@ -59,7 +86,7 @@ function renderLeaderboard(count, filterFriends) {
             rankDiv.classList.add('bronze');
         }
 
-        rankDiv.innerText = (index + 1).toString();
+        rankDiv.innerText = (player.rank || index + 1).toString();
 
         const nameDiv = document.createElement('div');
         nameDiv.classList.add('player-name');
@@ -67,7 +94,7 @@ function renderLeaderboard(count, filterFriends) {
 
         const xpDiv = document.createElement('div');
         xpDiv.classList.add('player-xp');
-        xpDiv.innerText = player.xp.toLocaleString() + ' XP';
+        xpDiv.innerText = (Number(player.xp) || 0).toLocaleString() + ' XP';
 
         card.appendChild(rankDiv);
         card.appendChild(nameDiv);
@@ -75,7 +102,7 @@ function renderLeaderboard(count, filterFriends) {
 
         container.appendChild(card);
 
-        if (index === 2 && shownPlayers.length > 3) {
+        if (index === 2 && players.length > 3) {
             const separator = document.createElement('div');
             separator.classList.add('separator');
             container.appendChild(separator);
@@ -83,29 +110,41 @@ function renderLeaderboard(count, filterFriends) {
     });
 }
 
-function render() {
-    const rawValue = topCountInput.value.trim();
-    if (rawValue === '') {
-        container.innerHTML = '';
-        const msg = document.createElement('div');
-        msg.className = 'no-results';
-        msg.innerText = 'Enter a number between 1 and 100.';
-        container.appendChild(msg);
+async function loadLeaderboard() {
+    const count = normalizeCount();
+    if (!count) {
         return;
     }
 
-    let count = Number(rawValue);
-    if (isNaN(count)) {
-        count = 1;
-    }
-    count = Math.max(1, Math.min(100, count));
-    topCountInput.value = count;
+    showMessage('Loading leaderboard...');
 
-    const filterFriends = friendsOnlyCheckbox.checked;
-    renderLeaderboard(count, filterFriends);
+    try {
+        const params = new URLSearchParams({ limit: count });
+        if (userID) {
+            params.set('userID', userID);
+        }
+
+        const response = await fetch(`${API_URL}/leaderboard?${params.toString()}`);
+        if (!response.ok) {
+            throw new Error(`Request failed with ${response.status}`);
+        }
+
+        const data = await response.json();
+        let leaderboardPlayers = data.players || [];
+
+        leaderboardPlayers = filterByFriends(leaderboardPlayers);
+
+        renderLeaderboard(leaderboardPlayers);
+    } catch (err) {
+        console.error('Error loading leaderboard:', err);
+        let fallback = fallbackPlayers;
+        fallback = filterByFriends(fallback);
+        renderLeaderboard(fallback.slice(0, count));
+    }
 }
 
-updateBtn.addEventListener('click', render);
-friendsOnlyCheckbox.addEventListener('change', render);
+updateBtn.addEventListener('click', loadLeaderboard);
 
-render();
+friendsOnlyCheckbox.addEventListener('change', loadLeaderboard);
+
+loadLeaderboard();

@@ -2,7 +2,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     min-height: 100%;
 }
@@ -136,14 +137,17 @@ main.page-main {
     background-color: #f59e0b;
     color: #1a1f26;
 }
+
 .player-rank.silver {
     background-color: #94a3b8;
     color: #1a1f26;
 }
+
 .player-rank.bronze {
     background-color: #c47a00;
     color: #1a1f26;
 }
+
 .player-name {
     font-size: 1.1rem;
     font-weight: bold;
@@ -172,4 +176,9 @@ main.page-main {
     color: #e2e8f0;
     font-weight: 600;
     margin-left: 1rem;
+}
+
+.player-card.current-player {
+    border-color: #14b8a6;
+    box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.18);
 }
