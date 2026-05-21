@@ -396,6 +396,46 @@ app.get('/fetch-profile-info', async (req, res) => {
   }
 });
 
+app.get('/leaderboard', async (req, res) => {
+  try {
+    const limit = Math.max(1, Math.min(100, Number(req.query.limit) || 10));
+    const userId = req.query.userID || req.query.userId;
+
+    const [users, totalPlayers, currentUser] = await Promise.all([
+      User.find({})
+        .select('userId name emoji xp doneQuests activeQuests')
+        .sort({ xp: -1, name: 1 })
+        .limit(limit),
+      User.countDocuments({}),
+      userId ? User.findOne({ userId }).select('userId xp') : null
+    ]);
+
+    let currentUserRank = null;
+    if (currentUser) {
+      const usersAhead = await User.countDocuments({ xp: { $gt: currentUser.xp || 0 } });
+      currentUserRank = usersAhead + 1;
+    }
+
+    res.json({
+      players: users.map((user, index) => ({
+        rank: index + 1,
+        userId: user.userId,
+        name: user.name,
+        emoji: user.emoji || '❔',
+        xp: user.xp || 0,
+        activeQuestCount: (user.activeQuests || []).length,
+        completedQuestCount: (user.doneQuests || []).length,
+        isCurrentUser: user.userId === userId
+      })),
+      totalPlayers,
+      currentUserRank
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.patch('/update-user-info', async (req, res) => {
   try {
     const { userId, name, email, emoji, bio, currentPassword, newPassword } = req.body;
