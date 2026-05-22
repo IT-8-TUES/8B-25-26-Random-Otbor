@@ -293,7 +293,7 @@
     overflow: hidden;
     transition: transform 0.2s, border-color 0.2s;
     cursor: pointer;
-    margin-bottom: 12px;
+    margin-bottom: 0.750rem;
 }
 
 .active-quest::before {
@@ -522,7 +522,7 @@
     text-transform: uppercase;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48.000rem) {
     .topbar-greeting h1 {
         font-size: 1.125rem;
     }
@@ -570,7 +570,7 @@
         display: none; /* Hide XP pill on small mobile to save space */
     }
 }
-@media (max-width: 480px) {
+@media (max-width: 30.000rem) {
     .topbar-greeting p {
         display: none;
     }

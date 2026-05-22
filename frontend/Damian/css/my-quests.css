@@ -542,7 +542,7 @@
     text-align: center;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 53.750rem) {
     .quest-toolbar {
         align-items: stretch;
         flex-direction: column;
@@ -569,7 +569,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48.000rem) {
     .quest-summary {
         grid-template-columns: 1fr;
     }
@@ -579,7 +579,7 @@
     }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 32.500rem) {
     .quest-title-row {
         flex-direction: column;
     }
