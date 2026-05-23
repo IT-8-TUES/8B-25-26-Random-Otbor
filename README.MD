@@ -160,17 +160,6 @@ git push origin feature/amazing-feature
 
 ---
 
-# 🐛 Known Issues
-
-* [ ] Няма preview на снимките преди upload
-* [ ] Friend requests все още свестни нямат notifications
-* [ ] Липсва rate limiting
-* [ ] XP system няма streak bonuses
-* [ ] Map view все още не е имплементиран
-* [ ] AI Quest Generation също още не е имплементиран
-
----
-
 # 🙏 Благодарности
 
 * Fonts: Press Start 2P, Nunito
@@ -194,7 +183,7 @@ Email: Анонимен и мисториозен |
 Instagram: [@yurzzilla](https://www.instagram.com/yurzzilla/)
 
 GitHub: @yurzzilla3000 - Юрий |
-Email: Същото анонимен и мистериозен |
+Email: Също e решил да бъде анонимен и мистериозен |
 Instagram: [@hackercatcho](https://www.instagram.com/hackercatcho/)
 
 ---
